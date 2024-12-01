@@ -10,7 +10,7 @@ interface IThemeContext {
   readonly saveInCookie: boolean;
   readonly SetThemeMode: (newTheme: string) => void;
   readonly GetThemeMode: () => string;
-};
+}
 
 const ThemeContext = createContext<IThemeContext | undefined>(undefined);
 
@@ -71,9 +71,9 @@ export class ThemeProvider extends Component<
 
     useEffect(() => {
       const themeListener = window.matchMedia("(prefers-color-scheme: light)");
-      const listener = ({ matches }: { matches: boolean }) => {
+      function listener({ matches }: { matches: boolean }) {
         SetCurrentThemeMode(matches ? "Lightness" : "Darkness");
-      };
+      }
 
       themeListener.addEventListener("change", listener);
       return () => {
@@ -99,11 +99,12 @@ export class ThemeProvider extends Component<
   }
 }
 
-export const useTheme = () => {
+export function useTheme<Theme>() {
   const context = useContext(ThemeContext);
   if (typeof context == "undefined") {
     throw new Error('Function "useTheme" must be used within a ThemeProvider!');
   }
 
-  return context;
-};
+  // Bad convert
+  return context as Omit<IThemeContext, "themeValues"> & { themeValues: Theme };
+}

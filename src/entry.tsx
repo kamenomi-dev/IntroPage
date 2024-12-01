@@ -9,6 +9,21 @@ import { ErrorPage } from "./error.tsx";
 
 import "./styles/layout.less";
 
+export type TThemeStyle = {
+  FloatTips: Record<string, string>,
+  DefaultFont: {
+    FontColor: string
+  },
+  NavigationBar: {
+    BackgroundColor: string
+  },
+  HomePage: {
+    Preview: {
+      BackgroundColor: string
+    }
+  }
+}
+
 const themeStyles = {
   Lightness: {
     FloatTips: {

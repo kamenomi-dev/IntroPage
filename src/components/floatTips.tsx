@@ -1,6 +1,8 @@
+import { type TThemeStyle } from "../entry";
+
 import { Component } from "preact";
 
-import { useTheme } from "./themeProvider";
+import { useTheme } from "../utils/themeProvider";
 
 export enum ETipsLevel {
   Info,
@@ -25,8 +27,8 @@ export class FloatTips extends Component<IFloatTipsProp> {
   }
 
   render(props: IFloatTipsProp) {
-    const theme = useTheme();
-    console.log(this.props);
+    const theme = useTheme<TThemeStyle>();
+
     return (
       <div
         id={"Utils-FloatTips"}
@@ -45,7 +47,7 @@ export class FloatTips extends Component<IFloatTipsProp> {
               document.getElementById("Utils-FloatTips")?.remove();
             }}
           >
-            ×
+            {"\u00D7"}
           </div>
         ) : (
           <></>

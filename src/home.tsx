@@ -1,12 +1,16 @@
+import { type TThemeStyle } from "./entry";
+
 import { Component } from "preact";
 
 import { useTheme } from "./utils/themeProvider";
 import { usePageFrame } from "./pageFrame";
 
+import logoImagePath from "./assets/NavBarIcon.png";
+
 export class HomePage extends Component {
   render() {
     const frame = usePageFrame(),
-      theme = useTheme();
+      theme = useTheme<TThemeStyle>();
     frame.SetPageTitle("Kamenの小窝");
 
     return (
@@ -21,7 +25,7 @@ export class HomePage extends Component {
             <img
               id={"content-logo"}
               title={"Logo"}
-              src={"/src/assets/NavBarIcon.png"}
+              src={logoImagePath}
               style={{
                 display: "inline-block",
               }}
