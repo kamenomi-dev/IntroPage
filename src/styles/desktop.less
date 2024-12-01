@@ -1,0 +1,25 @@
+@navigationBar-height: 56px;
+
+* {
+  margin: 0;
+  padding: 0;
+
+  /* Debug */
+  transition: all 0.2s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+body {
+  margin-top: @navigationBar-height;
+  background-color: #3B3B3B;
+
+  div#pageFrame-navigationBar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: @navigationBar-height;
+  }
+}
+
+@import "./utils/desktop.floatTips.less";
+@import "./pages/desktop.home.less";

@@ -1,0 +1,26 @@
+{
+  "name": "intro_page",
+  "type": "module",
+  "private": true,
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@types/js-cookie": "^3.0.6",
+    "@types/lodash": "^4.17.13",
+    "js-cookie": "^3.0.5",
+    "lodash": "^4.17.21",
+    "preact": "^10.25.0",
+    "preact-iso": "^2.8.1"
+  },
+  "devDependencies": {
+    "@preact/preset-vite": "^2.9.1",
+    "@types/bun": "latest",
+    "less": "^4.2.1",
+    "typescript": "~5.6.2",
+    "vite": "^6.0.1"
+  }
+}

@@ -1,0 +1,18 @@
+body {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 176px;
+  height: 21px;
+  transform: translate(-50%, -50%);
+
+  &::after {
+    content: "! 尚未支持小屏幕视面 !";
+  }
+
+  background-color: antiquewhite;
+
+  >* {
+    display: none !important;
+  }
+}
