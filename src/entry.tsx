@@ -1,3 +1,4 @@
+import "preact/debug"
 import { render } from "preact";
 
 import { LocationProvider, ErrorBoundary, Router, Route } from "preact-iso";
@@ -13,9 +14,6 @@ export type TThemeStyle = {
   FloatTips: Record<string, string>,
   DefaultFont: {
     FontColor: string
-  },
-  NavigationBar: {
-    BackgroundColor: string
   },
   HomePage: {
     Preview: {
@@ -35,9 +33,6 @@ const themeStyles = {
     DefaultFont: {
       FontColor: "black"
     },
-    NavigationBar: {
-      BackgroundColor: "#DEE2E6"
-    },
     HomePage: {
       Preview: {
         BackgroundColor: "#F8F9FA"
@@ -53,9 +48,6 @@ const themeStyles = {
     },
     DefaultFont: {
       FontColor: "white"
-    },
-    NavigationBar: {
-      BackgroundColor: "transparent"
     },
     HomePage: {
       Preview: {

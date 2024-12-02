@@ -1,48 +1,70 @@
 import { type TThemeStyle } from "../entry";
 
-import { Component, createContext } from "preact";
+import { Component, Context, createContext, JSX } from "preact";
 import { useContext } from "preact/hooks";
 
 import { useTheme } from "../utils/themeProvider";
-
-type TItem = {
-  name: string;
-  label: string;
-  callback: MouseEvent;
-};
 
 interface IContext {
   RemoveItem: (name: string) => void;
 }
 
+export enum NavigationBarStyles {
+  default,
+  transparent,
+}
+
+type TItem = {
+  name: string;
+  label: string;
+  callback?: JSX.MouseEventHandler<HTMLButtonElement>;
+};
+
 interface IProp {
+  id: string;
   items?: Array<TItem>;
-  fixed: boolean;
-  transparent: boolean;
+
+  style?: NavigationBarStyles;
+  fixed?: boolean;
 }
 
 interface IState {
   items: Array<TItem>;
 }
 
-const NavigationBarContext = createContext<IContext | undefined>(undefined);
+const contextList = new Map<string, Context<IContext | undefined>>();
 
-export class NavigationBar extends Component<Partial<IProp>, IState> {
+export class NavigationBar extends Component<IProp, IState> {
   public constructor(props: IProp) {
     super(props);
 
+    const { items, id } = props;
+
+    if (typeof id != "string") {
+      throw new Error("NavigationBar component id is not set! ");
+    }
+
     this.state = {
-      items: props.items || new Array<TItem>(),
+      items: items || new Array<TItem>(),
     };
+
+    if (contextList.has(id)) {
+      console.warn(
+        `Using the same id ${id} in NavigationBar may lead to unknown error. `
+      );
+    }
+    contextList.set(id, createContext<IContext | undefined>(undefined));
   }
 
   render(props: IProp) {
-    props = {
+    const { id, style, fixed } = {
+      ...props,
+      style: props.style || NavigationBarStyles.default,
       fixed: Boolean(props.fixed),
-      transparent: Boolean(props.transparent),
     };
 
     const currTheme = useTheme<TThemeStyle>().themeValues;
+    const currContext = contextList.get(id)!;
 
     const RemoveItem = (targetName: string) => {
       this.setState({
@@ -51,25 +73,48 @@ export class NavigationBar extends Component<Partial<IProp>, IState> {
     };
 
     return (
-      <NavigationBarContext.Provider value={{ RemoveItem }}>
+      <currContext.Provider value={{ RemoveItem }}>
         <div
           id={"NavigationBar"}
+          class={`style-${NavigationBarStyles[style!]}`}
           style={{
-            position: props.fixed ? "fixed" : "relative",
-            backgroundColor: currTheme.NavigationBar.BackgroundColor,
+            position: fixed ? "fixed" : "relative",
           }}
-        ></div>
-      </NavigationBarContext.Provider>
+        >
+          {this.state.items.map((val) => {
+            return (
+              <button
+                x-itemId={val.name}
+                type={"button"}
+                onClick={val.callback}
+                style={{
+                  color: currTheme.DefaultFont.FontColor,
+                }}
+              >
+                {val.label}
+              </button>
+            );
+          })}
+        </div>
+      </currContext.Provider>
     );
   }
 }
 
-
-export function useNavigationBar() {
-  const context = useContext(NavigationBarContext);
-  if (typeof context == "undefined") {
-    throw new Error('Function "useNavigationBar" must be used within a navigationBar!');
+export function useNavigationBar(id: string) {
+  const context = contextList.get(id);
+  if (context == undefined) {
+    throw new Error(
+      'Function "useNavigationBar" must be used within a navigationBar!'
+    );
   }
 
-  return context;
+  const contextValue = useContext(context);
+  if (contextValue == undefined) {
+    throw new Error(
+      'Function "useNavigationBar" must be used within a navigationBar!'
+    );
+  }
+
+  return contextValue;
 }

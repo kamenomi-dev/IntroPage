@@ -6,8 +6,9 @@ import { PropsWithChildren } from "preact/compat";
 
 import { useTheme } from "./utils/themeProvider";
 
+import { NavigationBar, NavigationBarStyles } from "./components/navigationBar";
 import { ETipsLevel, FloatTips } from "./components/floatTips";
-import { NavigationBar } from "./components/navigationBar";
+
 type TNavigationItem = {
   id: string;
   isEnabled: boolean;
@@ -59,7 +60,10 @@ export class PageFrame extends Component<PropsWithChildren> {
           tipslevel={ETipsLevel.Info}
           closable={true}
         />
-        <NavigationBar fixed={true}/>
+        <NavigationBar id={"pageFrame"} style={NavigationBarStyles.transparent} fixed={true} items={[
+          {name: "home", label:"主页"},
+          {name: "article", label:"文章"},
+        ]}/>
         {props.children}
       </PageFrameContext.Provider>
     );

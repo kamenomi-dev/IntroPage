@@ -1,0 +1,69 @@
+#NavigationBar {
+  z-index: 8;
+
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: stretch;
+  justify-content: flex-start;
+
+  top: 0;
+  width: 100%;
+  height: 56px;
+
+  &.style-transparent {
+    background-color: transparent;
+
+    > * {
+      background: none;
+
+      &:hover {
+        cursor: pointer;
+        
+        &::after {
+          left: 25%;
+          width: 50%;
+        }
+      }
+
+      &:active {
+        &::after {
+          position: relative;
+          top: -50%;
+          left: 25%;
+          width: 1px;
+          height: 50%;
+        }
+      }
+
+      &::after {
+        content: '';
+
+        display: block;
+        position: relative;
+        left: 50%;
+        width: 0;
+        height: 1px;
+
+        background-color: white;
+        transition: all .15s cubic-bezier(0.075, 0.82, 0.165, 1);
+      }
+    }
+
+    &:hover {
+      background-color: #3b3b3b31;
+    }
+
+    transition: all .3s cubic-bezier(0.075, 0.82, 0.165, 1);
+
+  }
+
+  > * {
+    border: none;
+    margin: 0 12px 0 12px;
+    height: 100%;
+    flex-basis: 120px;
+
+    font-size: medium;
+    text-decoration: none;
+  }
+}
