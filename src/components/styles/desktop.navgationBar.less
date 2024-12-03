@@ -1,4 +1,4 @@
-#NavigationBar {
+#Navigation {
   z-index: 8;
 
   display: flex;
@@ -13,7 +13,7 @@
   &.style-transparent {
     background-color: transparent;
 
-    > * {
+    > button {
       background: none;
 
       &:hover {
@@ -27,11 +27,7 @@
 
       &:active {
         &::after {
-          position: relative;
-          top: -50%;
-          left: 25%;
-          width: 1px;
-          height: 50%;
+          background-color: #ffffff62;
         }
       }
 
@@ -40,6 +36,7 @@
 
         display: block;
         position: relative;
+        top: 2px;
         left: 50%;
         width: 0;
         height: 1px;
@@ -50,20 +47,28 @@
     }
 
     &:hover {
-      background-color: #3b3b3b31;
+      background-color: #3b3b3b0c;
     }
 
     transition: all .3s cubic-bezier(0.075, 0.82, 0.165, 1);
 
   }
 
-  > * {
+  >button {
     border: none;
     margin: 0 12px 0 12px;
     height: 100%;
     flex-basis: 120px;
 
-    font-size: medium;
+    vertical-align:middle;
+    font-size: 16px;
+    line-height: 16px;
     text-decoration: none;
+  }
+
+  >#HeadPicture {
+    margin: 8px 0 8px 16px;
+    width: 40px;
+    height: 40px;
   }
 }

@@ -9,6 +9,8 @@ import { useTheme } from "./utils/themeProvider";
 import { NavigationBar, NavigationBarStyles } from "./components/navigationBar";
 import { ETipsLevel, FloatTips } from "./components/floatTips";
 
+import LogoPicturePath from "./assets/logo.jpg";
+
 type TNavigationItem = {
   id: string;
   isEnabled: boolean;
@@ -20,7 +22,6 @@ const PageFrameData = {
 
 interface IPageFrameContext {
   readonly SetPageTitle: (title: string) => void;
-  readonly HideNavigationItem: (id: string, enable: boolean) => void;
 }
 
 const PageFrameContext = createContext<IPageFrameContext | undefined>(
@@ -28,22 +29,11 @@ const PageFrameContext = createContext<IPageFrameContext | undefined>(
 );
 
 export class PageFrame extends Component<PropsWithChildren> {
-  public CalculateNavigationItems() {}
-
   render(props: PropsWithChildren): ComponentChildren {
     const theme = useTheme<TThemeStyle>();
 
     function SetPageTitle(title: string) {
       document.title = title;
-    }
-
-    function HideNavigationItem(id: string, enable: boolean) {
-      PageFrameData.itemData.map((data) => {
-        if (data.id == id) {
-          data.isEnabled = enable;
-        }
-        return data;
-      });
     }
 
     useLayoutEffect(() => {}, [PageFrameData]);
@@ -52,7 +42,6 @@ export class PageFrame extends Component<PropsWithChildren> {
       <PageFrameContext.Provider
         value={{
           SetPageTitle,
-          HideNavigationItem,
         }}
       >
         <FloatTips
@@ -60,9 +49,10 @@ export class PageFrame extends Component<PropsWithChildren> {
           tipslevel={ETipsLevel.Info}
           closable={true}
         />
-        <NavigationBar id={"pageFrame"} style={NavigationBarStyles.transparent} fixed={true} items={[
-          {name: "home", label:"主页"},
-          {name: "article", label:"文章"},
+        <NavigationBar id={"pageFrame"} style={NavigationBarStyles.transparent} sticky={true}
+        headPicture={LogoPicturePath} items={[
+          {name: "home", label:"主页", callback: () => alert("Jmp /home")},
+          {name: "article", label:"文章", callback: () => alert("Jmp /article")},
         ]}/>
         {props.children}
       </PageFrameContext.Provider>

@@ -23,9 +23,10 @@ type TItem = {
 interface IProp {
   id: string;
   items?: Array<TItem>;
+  headPicture?: string;
 
   style?: NavigationBarStyles;
-  fixed?: boolean;
+  sticky?: boolean;
 }
 
 interface IState {
@@ -57,10 +58,10 @@ export class NavigationBar extends Component<IProp, IState> {
   }
 
   render(props: IProp) {
-    const { id, style, fixed } = {
+    const { id, style, sticky, headPicture } = {
       ...props,
       style: props.style || NavigationBarStyles.default,
-      fixed: Boolean(props.fixed),
+      sticky: Boolean(props.sticky),
     };
 
     const currTheme = useTheme<TThemeStyle>().themeValues;
@@ -75,12 +76,19 @@ export class NavigationBar extends Component<IProp, IState> {
     return (
       <currContext.Provider value={{ RemoveItem }}>
         <div
-          id={"NavigationBar"}
+          id={"Navigation"}
           class={`style-${NavigationBarStyles[style!]}`}
           style={{
-            position: fixed ? "fixed" : "relative",
+            position: sticky
+              ? style == NavigationBarStyles.transparent
+                ? "fixed"
+                : "sticky"
+              : "relative",
           }}
         >
+          {headPicture && (
+            <img id={"HeadPicture"} class={"Unselectable"} title={"head picture"} src={headPicture} />
+          )}
           {this.state.items.map((val) => {
             return (
               <button

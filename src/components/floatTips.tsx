@@ -44,13 +44,17 @@ export class FloatTips extends Component<IFloatTipsProp> {
           <div
             id={"FloatTips-CloseBtn"}
             onClick={() => {
-              document.getElementById("Utils-FloatTips")?.remove();
+              const self = document.getElementById("Utils-FloatTips");
+              self?.classList.add("slideOut");
+              setTimeout(() => {
+                self?.remove();
+              }, 1000);
             }}
           >
             {"\u00D7"}
           </div>
         ) : (
-          <></>
+          []
         )}
       </div>
     );
