@@ -1,10 +1,6 @@
-import { type TThemeStyle } from "./entry";
-
 import { Component, ComponentChildren, createContext } from "preact";
 import { useContext, useLayoutEffect } from "preact/hooks";
 import { PropsWithChildren } from "preact/compat";
-
-import { useTheme } from "./utils/themeProvider";
 
 import { NavigationBar, NavigationBarStyles } from "./components/navigationBar";
 import { ETipsLevel, FloatTips } from "./components/floatTips";
@@ -30,8 +26,6 @@ const PageFrameContext = createContext<IPageFrameContext | undefined>(
 
 export class PageFrame extends Component<PropsWithChildren> {
   render(props: PropsWithChildren): ComponentChildren {
-    const theme = useTheme<TThemeStyle>();
-
     function SetPageTitle(title: string) {
       document.title = title;
     }
