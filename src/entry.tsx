@@ -1,5 +1,7 @@
-import "preact/debug"
+import "preact/debug";
 import { render } from "preact";
+
+import { IntlProvider as LocalizationProvider } from "preact-i18n";
 
 import { LocationProvider, ErrorBoundary, Router, Route } from "preact-iso";
 import { ThemeProvider } from "./utils/themeProvider.tsx";
@@ -9,67 +11,45 @@ import { HomePage } from "./home.tsx";
 import { ErrorPage } from "./error.tsx";
 
 import "./styles/layout.less";
+import axios from "axios";
 
 export type TThemeStyle = {
-  FloatTips: Record<string, string>,
+  FloatTips: Record<string, string>;
   DefaultFont: {
-    FontColor: string
-  },
+    FontColor: string;
+  };
   HomePage: {
     Preview: {
-      BackgroundColor: string
-    }
-  }
-}
+      BackgroundColor: string;
+    };
+  };
+};
 
-const themeStyles = {
-  Lightness: {
-    FloatTips: {
-      Info: "#74C0FC",
-      Advice: "#66D9E8",
-      Important: "#FFC078",
-      Fatal: "#ffA8A8"
-    },
-    DefaultFont: {
-      FontColor: "black"
-    },
-    HomePage: {
-      Preview: {
-        BackgroundColor: "#F8F9FA"
-      }
-    }
-  },
-  Darkness: {
-    FloatTips: {
-      Info: "#1971C2",
-      Advice: "#0C8599",
-      Important: "#E8590C",
-      Fatal: "#E03131"
-    },
-    DefaultFont: {
-      FontColor: "white"
-    },
-    HomePage: {
-      Preview: {
-        BackgroundColor: "#212529"
-      }
-    }
-  },
+// Convert to JSON first.
+axios.defaults.transformResponse = (data) => {
+  try {
+    return JSON.parse(data?.toString() || data);
+  } catch {
+    return data;
+  }
 };
 
 const Main = () => (
   <>
-    <ThemeProvider themes={themeStyles}>
-      <PageFrame>
-        <LocationProvider>
-          <ErrorBoundary>
-            <Router>
-              <Route path="/" component={HomePage} />
-              <Route default={true} component={ErrorPage} />
-            </Router>
-          </ErrorBoundary>
-        </LocationProvider>
-      </PageFrame>
+    <ThemeProvider themePath={"/assets/themes/"}>
+      <LocalizationProvider path={"/assets/languages/"}>
+        <PageFrame>
+          <LocationProvider>
+            <ErrorBoundary>
+              <Router>
+                <Route path="/" component={HomePage} />
+                <Route path="/error" component={HomePage} />
+                <Route default={true} component={ErrorPage} />
+              </Router>
+            </ErrorBoundary>
+          </LocationProvider>
+        </PageFrame>
+      </LocalizationProvider>
     </ThemeProvider>
   </>
 );

@@ -1,0 +1,16 @@
+{
+  "FloatTips": {
+    "Info": "#74C0FC",
+    "Advice": "#66D9E8",
+    "Important": "#FFC078",
+    "Fatal": "#FFA8A8"
+  },
+  "DefaultFont": {
+    "FontColor": "black"
+  },
+  "HomePage": {
+    "Preview": {
+      "BackgroundColor": "#F8F9FA"
+    }
+  }
+}

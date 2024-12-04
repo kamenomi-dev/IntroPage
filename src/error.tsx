@@ -2,6 +2,7 @@ import { Component } from "preact";
 
 // Todo 这里太敷衍了
 
+
 export class ErrorPage extends Component {
   render() {
     return <><style>{/*css*/`#err {

@@ -5,7 +5,7 @@ import { Component } from "preact";
 import { useTheme } from "./utils/themeProvider";
 import { usePageFrame } from "./pageFrame";
 
-import logoImagePath from "./assets/logo.jpg";
+import logoImagePath from "/assets/logo.jpg";
 
 export class HomePage extends Component {
   render() {

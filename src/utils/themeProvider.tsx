@@ -1,5 +1,7 @@
 import { Component, ComponentChildren, createContext } from "preact";
 import { useContext, useEffect } from "preact/hooks";
+
+import axios from "axios";
 import cookieManager from "./cookieManager";
 
 type TTheme = Record<string, any>;
@@ -15,7 +17,7 @@ interface IThemeContext {
 const ThemeContext = createContext<IThemeContext | undefined>(undefined);
 
 interface IThemeProviderProp {
-  themes: TTheme;
+  themePath: string;
   initialTheme?: string;
   saveInCookie?: boolean;
   children?: ComponentChildren;
@@ -23,6 +25,7 @@ interface IThemeProviderProp {
 
 interface IThemeProviderState {
   readonly themeMode: string;
+  readonly loadedThemes: Map<string, object>;
 }
 
 export class ThemeProvider extends Component<
@@ -37,6 +40,7 @@ export class ThemeProvider extends Component<
         props.initialTheme ||
         cookieManager.themeMode ||
         ThemeProvider.AutoSelectTheme(),
+      loadedThemes: new Map<string, object>(),
     };
 
     this.props.saveInCookie ||= cookieManager.isSaveThemeMode;
@@ -45,7 +49,7 @@ export class ThemeProvider extends Component<
   public static AutoSelectTheme(): string {
     try {
       if (window.matchMedia("(prefers-color-scheme: light)").matches) {
-        return "Lightness";
+        return "lightness";
       }
     } catch {
       console.warn(
@@ -53,27 +57,61 @@ export class ThemeProvider extends Component<
       );
     }
 
-    return "Darkness";
+    return "darkness";
+  }
+
+  public LoadThemeFile(theme: string) {
+    return new Promise<IThemeProviderState>((resolve, reject) => {
+      if (this.state.loadedThemes.get(theme) != undefined) {
+        return reject("Has been loaded");
+      }
+
+      const props = this.props;
+
+      axios
+        .get(props.themePath + theme + ".json")
+        .then(({ data: styleSheet, status, statusText }) => {
+          if (status != axios.HttpStatusCode.Ok) {
+            return console.warn(
+              `Request theme file failed! \n${status}: ${statusText}`
+            );
+          }
+          if (typeof styleSheet == "object") {
+            const themes = new Map(this.state.loadedThemes); // I hope I could improve this?
+            themes.set(theme, styleSheet);
+
+            resolve({
+              themeMode: theme,
+              loadedThemes: themes,
+            });
+          }
+        });
+    });
   }
 
   render(props: IThemeProviderProp): ComponentChildren {
-    const GetCurrentThemeMode = () => this.state.themeMode;
-    const SetCurrentThemeMode = (newTheme: string) => {
-      if (!Object.hasOwn(props!.themes, newTheme)) {
-        console.warn(`Warn! Theme "${newTheme}" is not defined in themes.`);
-        return;
-      }
+    const { themeMode, loadedThemes } = this.state;
 
-      this.setState({
-        themeMode: newTheme,
-      });
+    const GetCurrentThemeMode = () => themeMode;
+    const SetCurrentThemeMode = (theme: string): void => {
+      theme = theme.toLowerCase();
+
+      if (loadedThemes.get(theme) != undefined) {
+        return this.setState({
+          themeMode: theme,
+        });
+      }
     };
+
+    this.LoadThemeFile(themeMode).then((theme) => {
+      this.setState(theme);
+    }).catch(() => {});
 
     useEffect(() => {
       const themeListener = window.matchMedia("(prefers-color-scheme: light)");
-      function listener({ matches }: { matches: boolean }) {
-        SetCurrentThemeMode(matches ? "Lightness" : "Darkness");
-      }
+      const listener = ({ matches }: { matches: boolean }) => {
+        SetCurrentThemeMode(matches ? "lightness" : "darkness");
+      };
 
       themeListener.addEventListener("change", listener);
       return () => {
@@ -81,12 +119,12 @@ export class ThemeProvider extends Component<
       };
     }, []);
 
-    const currentThemeValues = props.themes[this.state.themeMode] || {};
+    const currentThemeValues = loadedThemes.get(themeMode)!;
 
     return (
       <ThemeContext.Provider
         value={{
-          themeMode: this.state.themeMode,
+          themeMode: themeMode,
           themeValues: currentThemeValues,
           saveInCookie: props.saveInCookie!,
           SetThemeMode: SetCurrentThemeMode,

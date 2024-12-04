@@ -1,0 +1,15 @@
+/*
+ *  Caution! The .json file doesn't support Comment syntax.
+ *  Using "Url()" to request the data.
+ *  Using "Loaclize()" to support mutli languages.
+ *  Using "{key}" to replace the raw string.
+ *  Adding custom key and value, and using it in source code.
+ *  This data will replace all the string in your document.
+ */
+
+{
+  "Name": "Kamenomi", // (nick)name
+  "Job": "",
+  "Gender": "", // Female, Male and etc.
+  "YearOfBirth": 1111 // Which year is of your birth.
+}

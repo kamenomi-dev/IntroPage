@@ -5,7 +5,7 @@ import { PropsWithChildren } from "preact/compat";
 import { NavigationBar, NavigationBarStyles } from "./components/navigationBar";
 import { ETipsLevel, FloatTips } from "./components/floatTips";
 
-import LogoPicturePath from "./assets/logo.jpg";
+import LogoPicturePath from "/assets/logo.jpg";
 
 type TNavigationItem = {
   id: string;

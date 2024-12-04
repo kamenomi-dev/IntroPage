@@ -1,0 +1,9 @@
+{
+  "PageFrame.Navigation.Home" : "主页",
+  "PageFrame.Navigation.About" : "关于",
+  "PageFrame.Navigation.Article" : "文章",
+  "PageFrame.Navigation.Blogroll": "友链",
+
+  "ErrorPage.404": "¯\\_(ツ)_/¯\n寻求的资源找不到~",
+  "ErrorPage.418": "(en.uk)☕I am a ea po, bruh."
+}
