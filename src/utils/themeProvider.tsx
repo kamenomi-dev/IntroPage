@@ -4,35 +4,33 @@ import { useContext, useEffect } from "preact/hooks";
 import axios from "axios";
 import cookieManager from "./cookieManager";
 
-type TTheme = Record<string, any>;
-
-interface IThemeContext {
+interface IContext {
   readonly themeMode: string;
-  readonly themeValues: TTheme;
+  readonly themeValues: Record<string, any>;
   readonly saveInCookie: boolean;
   readonly SetThemeMode: (newTheme: string) => void;
   readonly GetThemeMode: () => string;
 }
 
-const ThemeContext = createContext<IThemeContext | undefined>(undefined);
+const ThemeContext = createContext<IContext | undefined>(undefined);
 
-interface IThemeProviderProp {
+interface IProp {
   themePath: string;
   initialTheme?: string;
   saveInCookie?: boolean;
   children?: ComponentChildren;
 }
 
-interface IThemeProviderState {
+interface IState {
   readonly themeMode: string;
   readonly loadedThemes: Map<string, object>;
 }
 
 export class ThemeProvider extends Component<
-  IThemeProviderProp,
-  IThemeProviderState
+  IProp,
+  IState
 > {
-  public constructor(props: IThemeProviderProp) {
+  public constructor(props: IProp) {
     super(props);
 
     this.state = {
@@ -61,7 +59,7 @@ export class ThemeProvider extends Component<
   }
 
   public LoadThemeFile(theme: string) {
-    return new Promise<IThemeProviderState>((resolve, reject) => {
+    return new Promise<IState>((resolve, reject) => {
       if (this.state.loadedThemes.get(theme) != undefined) {
         return reject("Has been loaded");
       }
@@ -89,7 +87,7 @@ export class ThemeProvider extends Component<
     });
   }
 
-  render(props: IThemeProviderProp): ComponentChildren {
+  render(props: IProp): ComponentChildren {
     const { themeMode, loadedThemes } = this.state;
 
     const GetCurrentThemeMode = () => themeMode;
@@ -144,5 +142,5 @@ export function useTheme<Theme>() {
   }
 
   // Bad convert
-  return context as Omit<IThemeContext, "themeValues"> & { themeValues: Theme };
+  return context as Omit<IContext, "themeValues"> & { themeValues: Theme };
 }

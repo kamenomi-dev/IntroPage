@@ -1,9 +1,8 @@
 import "preact/debug";
 import { render } from "preact";
 
-import { IntlProvider as LocalizationProvider } from "preact-i18n";
-
 import { LocationProvider, ErrorBoundary, Router, Route } from "preact-iso";
+import { LocalizationProvider } from "./utils/localizationProvider.tsx";
 import { ThemeProvider } from "./utils/themeProvider.tsx";
 
 import { PageFrame } from "./pageFrame.tsx";
